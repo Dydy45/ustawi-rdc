@@ -1,30 +1,44 @@
+import { useState } from "react";
+
 export default function OtpScreen() {
-    return (
-        <div className="w-[360px] h-[640px] bg-white p-6 flex flex-col items-center">
-            <h2 className="text-xl font-bold mb-6">Entre le code</h2>
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
 
-            {/* 4 champs */}
-            <div className="flex space-x-2 mb-4">
-                {[...Array(4)].map((_, i) => (
-                    <input
-                        key={i}
-                        maxLength={1}
-                        className="w-12 h-12 border border-gray-300 rounded text-center text-2xl"
-                    />
-                ))}
-            </div>
+  const requestOtp = async () => {
+    setLoading(true);
+    try {
+      await fetch("http://localhost:4000/api/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone }),
+      });
+      alert("Code envoyé ! (regarde la console serveur)");
+    } catch {
+      alert("Erreur d’envoi");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            <p className="text-sm text-gray-600 mb-6">
-                Nous avons envoyé un SMS au +243 ... ... 123
-            </p>
+  return (
+    <div className="w-[360px] h-[640px] bg-white p-6 flex flex-col items-center">
+      <h2 className="text-xl font-bold mb-6">Entre le code</h2>
 
-            <button className="w-full py-3 bg-emerald-600 text-white rounded-lg mb-4">
-                Vérifier
-            </button>
+      <input
+        type="tel"
+        placeholder="+243..."
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="w-full mb-4 p-2 border rounded"
+      />
 
-            <a href="#" className="text-sm text-emerald-600 underline">
-                Renvoyer le code (60 s)
-            </a>
-        </div>
-    );
+      <button
+        onClick={requestOtp}
+        disabled={loading}
+        className="w-full py-3 bg-emerald-600 text-white rounded-lg"
+      >
+        {loading ? "Envoi..." : "Recevoir SMS"}
+      </button>
+    </div>
+  );
 }

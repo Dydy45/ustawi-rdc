@@ -1,4 +1,5 @@
 import { useState } from 'react';
+const API = "http://localhost:4000";
 import SplashScreen from './screens/SplashScreen';
 import LanguageSelect from './screens/LanguageSelect';
 import OtpScreen from './screens/OtpScreen';
