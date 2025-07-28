@@ -1,0 +1,27 @@
+// This is my Prisma schema file,
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Therapist {
+  id          Int       @id @default(autoincrement())
+  name        String    
+  speciality  String
+  languages   String[]
+  price       Int
+  avatar      String
+  createdAt   DateTime  @default(now())
+}
+
+model Appointment {
+  id          Int       @id @default(autoincrement())
+  therapistsId Int
+  userPhone   String
+  date        DateTime
+  createdAt   DateTime  @default(now())
+}

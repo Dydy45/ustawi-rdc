@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import fs from 'fs';
-import path from 'path';
+import { PrismaClient } from '@prisma/client';
 import { sendOtp } from './sendSms';
 
+const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
 app.use(cors({
@@ -22,8 +22,10 @@ app.post('/api/send-otp', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 4000;
-const therapists = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'data/therapists.json'), 'utf-8'));
-app.get('/api/therapists', (req, res) => res.json(therapists));
+app.get('/api/therapists', async (req, res) => {
+    const therapists = await prisma.therapist.findMany();
+    res.json(therapists);
+});
 
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`🚀Server is running on http://localhost:${PORT}`));
