@@ -8,5 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+<<<<<<< HEAD
   base: "/ustawi-rdc/", // Base path for deployment
+=======
+  base: '/ustawi-rdc/',
+>>>>>>> dc491e5cee258fe5a2adc3f8c32097914e28458b
 })
