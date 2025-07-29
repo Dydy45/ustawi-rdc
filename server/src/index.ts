@@ -47,7 +47,13 @@ app.post('/api/appointments', (req, res) => {
 });
 
 // GET /api/appointments
-app.get('/api/appointments', (_req, res) => res.json(appointments));
+app.get('/api/appointments', (_req, res) => {
+  const enriched = appointments.map((a) => ({
+    ...a,
+    therapistName: therapists.find((t) => t.id === a.therapistId)?.name || 'Inconnu',
+  }));
+  res.json(enriched);
+});
 
 // ====== SMS de rappel automatique ======
 function sendReminder() {
